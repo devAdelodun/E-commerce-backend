@@ -3,58 +3,6 @@ import ash from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-// Register a new user
-export const registerUser = ash(async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
-
-    const userExists = await User.findOne({ email });
-
-    if (userExists) {
-        res.status(400);
-        throw new Error('User already exists');
-    }
-
-    const user = new User({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        password: bcrypt.hashSync(password, 10),
-    });
-
-    const createdUser = await user.save();
-
-    res.status(201).json({
-        _id: createdUser._id,
-        firstName: createdUser.firstName,
-        lastName: createdUser.lastName,
-        email: createdUser.email,
-        phoneNumber: createdUser.phoneNumber,
-        token: generateToken(createdUser._id),
-    });
-});
-
-// Authenticate user and get token
-export const authUser = ash(async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            token: generateToken(user._id),
-        });
-    } else {
-        res.status(401);
-        throw new Error('Invalid email or password');
-    }
-});
-
 // Get user profile
 export const getUserProfile = ash(async (req, res) => {
     const user = await User.findById(req.user._id);

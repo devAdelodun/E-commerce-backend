@@ -1,7 +1,7 @@
 import Cart from '../models/Cart.js';
 import ash from 'express-async-handler';
 
-// Create or update cart
+
 export const addToCart = ash(async (req, res) => {
     const { product, quantity } = req.body;
     const cart = await Cart.findOne({ user_id: req.user._id });
@@ -27,7 +27,7 @@ export const addToCart = ash(async (req, res) => {
     }
 });
 
-// Get user's cart
+
 export const getUserCart = ash(async (req, res) => {
     const cart = await Cart.findOne({ user_id: req.user._id }).populate('items.product');
     if (cart) {
@@ -38,7 +38,6 @@ export const getUserCart = ash(async (req, res) => {
     }
 });
 
-// Remove item from cart
 export const removeFromCart = ash(async (req, res) => {
     const { productId } = req.body;
     const cart = await Cart.findOne({ user_id: req.user._id });

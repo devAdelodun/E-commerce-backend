@@ -2,7 +2,7 @@ import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import ash from 'express-async-handler';
 
-// Create an order
+
 export const createOrder = ash(async (req, res) => {
     const { shippingAddress, paymentMethod, totalPrice } = req.body;
     const cart = await Cart.findOne({ user_id: req.user._id });
@@ -25,13 +25,13 @@ export const createOrder = ash(async (req, res) => {
     }
 });
 
-// Get user's orders
+
 export const getUserOrders = ash(async (req, res) => {
     const orders = await Order.find({ user_id: req.user._id });
     res.json(orders);
 });
 
-// Get order by ID
+
 export const getOrderById = ash(async (req, res) => {
     const order = await Order.findById(req.params.id).populate('items.product_id');
 
@@ -43,7 +43,7 @@ export const getOrderById = ash(async (req, res) => {
     }
 });
 
-// Update order status
+
 export const updateOrderStatus = ash(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
